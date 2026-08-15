@@ -74,7 +74,7 @@ func DeleteTask(task_id string, sql_connection *pgx.Conn) error {
 func CreateDB(sql_connection *pgx.Conn) error {
 	query := `
 			CREATE TABLE tasks(
-			task_id INT PRIMARY KEY AUTOINCREMENT,
+			task_id INT AUTO_INCREMENT PRIMARY KEY,
 			task_name VARCHAR(200),
 			task_date DATE,
 			task_description TEXT)`
