@@ -3,22 +3,29 @@ package main
 import (
 	"log"
 	"net/http"
-
-	"github.com/gofiber/fiber/v3"
 )
 
 func main() {
-	app := fiber.New()
+
 	conn, err := conn()
 	if err != nil {
 		log.Fatal("Base de datos caída")
 	}
+	err1 := CreateDB(conn)
+	if err1 != nil {
+		log.Fatal("No se pudo crear la base de datos")
+	}
+
 	http.HandleFunc("/task", func(w http.ResponseWriter, r *http.Request) {
 		Task_general(conn, w, r)
 	})
-	http.HandleFunc("tasks", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/tasks", func(w http.ResponseWriter, r *http.Request) {
 		GetTaskHandler(conn, w, r)
 	})
 
-	log.Fatal(app.Listen(":3000"))
+	err2 := http.ListenAndServe(":8080", nil)
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+
 }
