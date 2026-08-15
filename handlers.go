@@ -45,7 +45,8 @@ func RegisterTaskHandler(conn *pgx.Conn, w http.ResponseWriter, r *http.Request)
 
 	err1 := RegisterTask(task, conn)
 	if err1 != nil {
-		http.Error(w, "Error al registrar la Task", http.StatusInternalServerError)
+		//http.Error(w, "Error al registrar la Task", http.StatusInternalServerError)
+		http.Error(w, err1.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
