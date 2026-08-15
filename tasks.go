@@ -7,15 +7,15 @@ import (
 )
 
 type Task struct {
-	id               string
-	task_name        string
-	task_date        string
-	task_description string
+	TaskId          string `json:"task_id"`
+	TaskName        string `json:"task_name"`
+	TaskDate        string `json:"task_date"`
+	TaskDescription string `json:"task_description"`
 }
 
 func RegisterTask(task Task, sql_connection *pgx.Conn) error {
-	query := "INSERT INTO tasks (task_name, task_date, task_description) VALUES ($1,$2, $3, $4)"
-	_, err := sql_connection.Exec(context.Background(), query, task.task_name, task.task_date, task.task_description)
+	query := "INSERT INTO tasks (task_name, task_date, task_description) VALUES ($1,$2, $3)"
+	_, err := sql_connection.Exec(context.Background(), query, task.TaskName, task.TaskDate, task.TaskDescription)
 
 	return err
 
@@ -35,10 +35,10 @@ func GetTasks(sql_connection *pgx.Conn) ([]Task, error) {
 		var task Task
 
 		err := rows.Scan(
-			&task.id,
-			&task.task_name,
-			&task.task_date,
-			&task.task_description,
+			&task.TaskId,
+			&task.TaskName,
+			&task.TaskDate,
+			&task.TaskDescription,
 		)
 		if err != nil {
 			return nil, err

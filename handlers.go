@@ -10,12 +10,15 @@ import (
 func Task_general(conn *pgx.Conn, w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		RegisterTaskHandler(conn, w, r)
+		return
 	}
 	if r.Method == http.MethodDelete {
 		DeleteTaskHandler(conn, w, r)
+		return
 	}
 	if r.Method == http.MethodPut {
 		UpdateTaskHandler(conn, w, r)
+		return
 	}
 
 	http.Error(w, "Método no valido", http.StatusMethodNotAllowed)

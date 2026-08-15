@@ -11,10 +11,10 @@ func main() {
 	if err != nil {
 		log.Fatal("Base de datos caída")
 	}
-	err1 := CreateDB(conn)
+	/*err1 := CreateDB(conn)
 	if err1 != nil {
-		log.Fatal("No se pudo crear la base de datos")
-	}
+		log.Fatal("No se pudo crear la base de datos ( tablas )")
+	}*/
 
 	http.HandleFunc("/task", func(w http.ResponseWriter, r *http.Request) {
 		Task_general(conn, w, r)
