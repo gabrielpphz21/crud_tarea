@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"time"
 
 	"github.com/jackc/pgx/v5"
 )
@@ -29,20 +30,24 @@ func GetTasks(sql_connection *pgx.Conn) ([]Task, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
 	var response []Task
 
 	for rows.Next() {
 		var task Task
+		var time_t time.Time
 
 		err := rows.Scan(
 			&task.TaskId,
 			&task.TaskName,
-			&task.TaskDate,
+			&time_t,
 			&task.TaskDescription,
 		)
+
 		if err != nil {
 			return nil, err
 		}
+		task.TaskDate = time_t.Format("2006-01-02")
 
 		response = append(response, task)
 
@@ -55,16 +60,16 @@ func GetTasks(sql_connection *pgx.Conn) ([]Task, error) {
 func UpdateTask(selected_T Task, sql_connection *pgx.Conn) error {
 	query := `UPDATE tasks
 			  SET task_name=$1, task_date=$2, task_description=$3
-			  WHERE id=$4`
-	_, err := sql_connection.Query(context.Background(), query)
+			  WHERE task_id=$4`
+	_, err := sql_connection.Exec(context.Background(), query, selected_T.TaskName, selected_T.TaskDate, selected_T.TaskDescription, selected_T.TaskId)
 
 	return err
 
 }
 
-func DeleteTask(task_id string, sql_connection *pgx.Conn) error {
+func DeleteTask(task_id int, sql_connection *pgx.Conn) error {
 	query := `DELETE FROM tasks
-			  WHERE id=$1`
+			  WHERE task_id=$1`
 	_, err := sql_connection.Exec(context.Background(), query, task_id)
 
 	return err
