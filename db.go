@@ -10,7 +10,7 @@ import (
 
 func conn() (*pgx.Conn, error) {
 	// urlExample := "postgres://username:password@localhost:5432/database_name"
-	conn, err := pgx.Connect(context.Background(), ("postgres://postgres:password@localhost:5432/postgres"))
+	conn, err := pgx.Connect(context.Background(), ("postgres://postgres:password@psqlDB:5432/postgres"))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
